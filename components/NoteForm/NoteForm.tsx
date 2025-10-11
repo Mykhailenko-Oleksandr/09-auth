@@ -4,7 +4,7 @@ import css from "./NoteForm.module.css";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { createNote } from "@/lib/api";
+import { createNote } from "@/lib/api/clientApi";
 import { useRouter } from "next/navigation";
 import { NoteFormData } from "@/types/note";
 import { useNoteDraftStore } from "@/lib/store/noteStore";
@@ -76,7 +76,9 @@ export default function NoteForm() {
   };
 
   return (
-    <form action={handleSubmit} className={css.form}>
+    <form
+      action={handleSubmit}
+      className={css.form}>
       <div className={css.formGroup}>
         <label htmlFor="title">Title</label>
         <input
@@ -110,8 +112,7 @@ export default function NoteForm() {
           className={css.select}
           defaultValue={draft?.tag}
           onChange={handleChange}
-          required
-        >
+          required>
           <option value="Todo">Todo</option>
           <option value="Work">Work</option>
           <option value="Personal">Personal</option>
@@ -121,10 +122,16 @@ export default function NoteForm() {
       </div>
 
       <div className={css.actions}>
-        <button onClick={onClose} type="button" className={css.cancelButton}>
+        <button
+          onClick={onClose}
+          type="button"
+          className={css.cancelButton}>
           Cancel
         </button>
-        <button type="submit" className={css.submitButton} disabled={false}>
+        <button
+          type="submit"
+          className={css.submitButton}
+          disabled={false}>
           Create note
         </button>
       </div>

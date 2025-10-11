@@ -4,7 +4,7 @@ import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import NoteList from "@/components/NoteList/NoteList";
 import Pagination from "@/components/Pagination/Pagination";
 import SearchBox from "@/components/SearchBox/SearchBox";
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/clientApi";
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
@@ -49,7 +49,9 @@ export default function NotesClient({ category }: NotesClientProps) {
             updatePage={setPage}
           />
         )}
-        <button className={css.button} onClick={onClickCreated}>
+        <button
+          className={css.button}
+          onClick={onClickCreated}>
           Create note +
         </button>
       </header>

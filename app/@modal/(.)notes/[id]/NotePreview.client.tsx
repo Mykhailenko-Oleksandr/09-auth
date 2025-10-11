@@ -3,7 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import css from "./NotePreview.module.css";
 import Modal from "@/components/Modal/Modal";
-import { fetchNoteById } from "@/lib/api";
+import { fetchNoteById } from "@/lib/api/clientApi";
 import { useQuery } from "@tanstack/react-query";
 
 export default function NotePreviewClient() {
@@ -30,7 +30,9 @@ export default function NotePreviewClient() {
 
   return (
     <Modal onClose={handleBack}>
-      <button className={css.backBtn} onClick={handleBack}>
+      <button
+        className={css.backBtn}
+        onClick={handleBack}>
         Back
       </button>
       <div className={css.container}>
