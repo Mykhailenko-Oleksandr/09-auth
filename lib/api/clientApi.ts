@@ -1,10 +1,6 @@
+import { User } from "@/types/user";
 import type { Note, NoteFormData } from "../../types/note";
 import { nextServer } from "./api";
-
-// axios.defaults.baseURL = "https://notehub-api.goit.study/api";
-// axios.defaults.headers.common["Authorization"] = `Bearer ${
-//   process.env.NEXT_PUBLIC_NOTEHUB_TOKEN
-// }`;
 
 export interface ResponseAPI {
   notes: Note[];
@@ -21,6 +17,19 @@ export interface OptionsAPI {
   headers?: {
     Cookie: string;
   };
+}
+
+export type UserRequest = {
+  email: string;
+  password: string;
+};
+
+export interface CheckSessionRequest {
+  success: boolean;
+}
+
+export interface UpdateUserRequest {
+  username: string;
 }
 
 export async function fetchNotes(
@@ -60,56 +69,31 @@ export async function deleteNote(id: string) {
   return res.data;
 }
 
-export type RegisterRequest = {
-  email: string;
-  password: string;
-};
-
-export type User = {
-  username: string;
-  email: string;
-  avatar?: string;
-};
-
-export const register = async (data: RegisterRequest) => {
+export async function register(data: UserRequest) {
   const res = await nextServer.post<User>("/auth/register", data);
   return res.data;
-};
+}
 
-export type LoginRequest = {
-  email: string;
-  password: string;
-};
-
-export const login = async (data: LoginRequest) => {
+export async function login(data: UserRequest) {
   const res = await nextServer.post<User>("/auth/login", data);
   return res.data;
-};
+}
 
-export const logout = async (): Promise<void> => {
+export async function logout(): Promise<void> {
   await nextServer.post("/auth/logout");
-};
+}
 
-export type CheckSessionRequest = {
-  message: string;
-};
-
-export const checkSession = async () => {
+export async function checkSession() {
   const res = await nextServer.get<CheckSessionRequest>("/auth/session");
   return res.data;
-};
+}
 
-export const getMe = async () => {
-  const { data } = await nextServer.get<User>("/auth/me");
-  return data;
-};
-
-export type UpdateUserRequest = {
-  email: string;
-  username: string;
-};
-
-export const updateMe = async (payload: UpdateUserRequest) => {
-  const res = await nextServer.put<User>("/auth/me", payload);
+export async function getMe() {
+  const res = await nextServer.get<User>("/users/me");
   return res.data;
-};
+}
+
+export async function updateMe(payload: UpdateUserRequest) {
+  const res = await nextServer.patch<User>("/users/me", payload);
+  return res.data;
+}
