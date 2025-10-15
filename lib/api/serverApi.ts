@@ -4,26 +4,6 @@ import { CheckSessionRequest, OptionsAPI, ResponseAPI } from "./clientApi";
 import { Note } from "@/types/note";
 import { User } from "@/types/user";
 
-export async function checkSession() {
-  const cookieStore = await cookies();
-  const res = await nextServer.get<CheckSessionRequest>("/auth/session", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  return res;
-}
-
-export async function getMe() {
-  const cookieStore = await cookies();
-  const { data } = await nextServer.get<User>("/users/me", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-  });
-  return data;
-}
-
 export async function fetchNotes(
   searchWord: string,
   page: number,
@@ -53,6 +33,26 @@ export async function fetchNotes(
 export async function fetchNoteById(id: string) {
   const cookieStore = await cookies();
   const { data } = await nextServer.get<Note>(`/notes/${id}`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return data;
+}
+
+export async function checkSession() {
+  const cookieStore = await cookies();
+  const res = await nextServer.get<CheckSessionRequest>("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+  });
+  return res;
+}
+
+export async function getMe() {
+  const cookieStore = await cookies();
+  const { data } = await nextServer.get<User>("/users/me", {
     headers: {
       Cookie: cookieStore.toString(),
     },

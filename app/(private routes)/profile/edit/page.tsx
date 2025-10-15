@@ -4,35 +4,47 @@ import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { User } from "@/types/user";
 import { getMe, updateMe } from "@/lib/api/clientApi";
 import { ApiError } from "@/app/api/api";
 import css from "./EditProfilePage.module.css";
+import { useAuthStore } from "@/lib/store/authStore";
 
 export default function EditProfile() {
-  const [user, setUser] = useState<User | null>(null);
   const [userName, setUserName] = useState("");
+  const setUser = useAuthStore((state) => state.setUser);
+  const { user } = useAuthStore();
   const router = useRouter();
 
   useEffect(() => {
     getMe().then((user) => {
-      setUser(user);
       setUserName(user.username);
     });
   }, []);
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setUserName(event.target.value);
-  };
+  }
 
   function handleCancel() {
     router.back();
   }
 
-  const handleSaveUser = async () => {
+  async function handleSaveUser(formData: FormData) {
+    if (!user) {
+      return;
+    }
+
+    const username = formData.get("username") as string;
+
     try {
-      await updateMe({ username: userName });
-      router.push("/profile");
+      const res = await updateMe({ username });
+      if (res) {
+        setUser(res);
+        console.log(user);
+        console.log(res);
+
+        router.push("/profile");
+      }
     } catch (error) {
       toast.error(
         (error as ApiError).response?.data?.response?.validation?.body
@@ -42,7 +54,7 @@ export default function EditProfile() {
           "Oops... some error"
       );
     }
-  };
+  }
 
   return (
     <main className={css.mainContent}>
@@ -66,6 +78,7 @@ export default function EditProfile() {
             <label htmlFor="username">Username: {userName}</label>
             <input
               id="username"
+              name="username"
               type="text"
               className={css.input}
               defaultValue={userName}
