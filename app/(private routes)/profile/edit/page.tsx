@@ -40,9 +40,6 @@ export default function EditProfile() {
       const res = await updateMe({ username });
       if (res) {
         setUser(res);
-        console.log(user);
-        console.log(res);
-
         router.push("/profile");
       }
     } catch (error) {
